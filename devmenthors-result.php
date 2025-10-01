@@ -9,7 +9,23 @@ if (!$micrositeId) {
 }
 
 $micrositeUrl = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/devmenthors.php?id=' . $micrositeId;
-$qrCodeUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=' . urlencode($micrositeUrl);
+
+// Configurações padrão do QR Code
+$qrSize = $_GET['size'] ?? 500;
+$qrColor = $_GET['color'] ?? '2364aa';
+$qrBgColor = $_GET['bgcolor'] ?? 'ffffff';
+$qrMargin = $_GET['margin'] ?? 2;
+$qrFormat = $_GET['format'] ?? 'png';
+
+// Gerar URL do QR Code com personalização
+$qrCodeUrl = 'https://api.qrserver.com/v1/create-qr-code/?' . http_build_query([
+    'size' => $qrSize . 'x' . $qrSize,
+    'data' => $micrositeUrl,
+    'color' => $qrColor,
+    'bgcolor' => $qrBgColor,
+    'margin' => $qrMargin,
+    'format' => $qrFormat
+]);
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -33,6 +49,24 @@ $qrCodeUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=' . 
         .gradient-accent {
             background: linear-gradient(90deg, var(--mikado-yellow), var(--pumpkin));
         }
+        /* Container do QR Code com rodapé */
+        .qr-container {
+            position: relative;
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+        }
+        .qr-footer {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid #e5e7eb;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #6b7280;
+            font-family: monospace;
+            word-break: break-all;
+        }
     </style>
 </head>
 <body class="gradient-bg min-h-screen">
@@ -47,38 +81,135 @@ $qrCodeUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=' . 
                 <p class="text-white/90 text-lg">Sua página está pronta para ser compartilhada</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- QR Code -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Personalização do QR Code -->
                 <div class="bg-white/15 backdrop-blur-xl rounded-2xl shadow-2xl p-6 border-2 border-white/30">
-                    <h2 class="text-2xl font-bold text-white mb-4 text-center">
-                        <i class="fas fa-qrcode mr-2 text-yellow-300"></i>QR Code
+                    <h2 class="text-2xl font-bold text-white mb-4">
+                        <i class="fas fa-palette mr-2 text-yellow-300"></i>Personalizar QR Code
                     </h2>
                     
-                    <div class="bg-white rounded-xl p-6 mb-4">
-                        <img src="<?php echo $qrCodeUrl; ?>" alt="QR Code" class="w-full max-w-sm mx-auto">
+                    <form id="qrCustomForm" class="space-y-4">
+                        <!-- Tamanho -->
+                        <div>
+                            <label class="block text-white text-sm font-bold mb-2">
+                                Tamanho (px)
+                            </label>
+                            <input type="range" id="qrSize" min="200" max="1000" value="<?php echo $qrSize; ?>" 
+                                   class="w-full">
+                            <div class="flex justify-between text-white/60 text-xs mt-1">
+                                <span>200px</span>
+                                <span id="qrSizeValue"><?php echo $qrSize; ?>px</span>
+                                <span>1000px</span>
+                            </div>
+                        </div>
+
+                        <!-- Cor do QR Code -->
+                        <div>
+                            <label class="block text-white text-sm font-bold mb-2">
+                                Cor do QR Code
+                            </label>
+                            <div class="flex gap-2">
+                                <input type="color" id="qrColor" value="#<?php echo $qrColor; ?>" 
+                                       class="w-16 h-12 rounded-xl border-2 border-white/30 cursor-pointer">
+                                <input type="text" id="qrColorText" value="<?php echo $qrColor; ?>" 
+                                       placeholder="HEX (sem #)"
+                                       maxlength="6"
+                                       class="flex-1 px-4 py-2 bg-white/10 text-white border-2 border-verdigris/50 rounded-xl focus:outline-none focus:border-yellow-400 placeholder-white/50 backdrop-blur-sm">
+                            </div>
+                            <p class="text-white/60 text-xs mt-1">Sem o #</p>
+                        </div>
+
+                        <!-- Cor de Fundo -->
+                        <div>
+                            <label class="block text-white text-sm font-bold mb-2">
+                                Cor de Fundo
+                            </label>
+                            <div class="flex gap-2">
+                                <input type="color" id="qrBgColor" value="#<?php echo $qrBgColor; ?>" 
+                                       class="w-16 h-12 rounded-xl border-2 border-white/30 cursor-pointer">
+                                <input type="text" id="qrBgColorText" value="<?php echo $qrBgColor; ?>" 
+                                       placeholder="HEX (sem #)"
+                                       maxlength="6"
+                                       class="flex-1 px-4 py-2 bg-white/10 text-white border-2 border-verdigris/50 rounded-xl focus:outline-none focus:border-yellow-400 placeholder-white/50 backdrop-blur-sm">
+                            </div>
+                        </div>
+
+                        <!-- Margem -->
+                        <div>
+                            <label class="block text-white text-sm font-bold mb-2">
+                                Margem
+                            </label>
+                            <input type="range" id="qrMargin" min="0" max="10" value="<?php echo $qrMargin; ?>" 
+                                   class="w-full">
+                            <div class="flex justify-between text-white/60 text-xs mt-1">
+                                <span>0</span>
+                                <span id="qrMarginValue"><?php echo $qrMargin; ?></span>
+                                <span>10</span>
+                            </div>
+                        </div>
+
+                        <!-- Formato -->
+                        <div>
+                            <label class="block text-white text-sm font-bold mb-2">
+                                Formato
+                            </label>
+                            <select id="qrFormat" class="w-full px-4 py-3 bg-white/10 text-white border-2 border-verdigris/50 rounded-xl focus:outline-none focus:border-yellow-400 backdrop-blur-sm">
+                                <option value="png" <?php echo $qrFormat === 'png' ? 'selected' : ''; ?>>PNG</option>
+                                <option value="svg" <?php echo $qrFormat === 'svg' ? 'selected' : ''; ?>>SVG (Vetorial)</option>
+                                <option value="eps" <?php echo $qrFormat === 'eps' ? 'selected' : ''; ?>>EPS (Impressão)</option>
+                            </select>
+                        </div>
+
+                        <button type="button" onclick="updateQRCode()" 
+                                class="w-full gradient-accent hover:opacity-90 text-white font-bold py-3 px-6 rounded-xl transition shadow-lg transform hover:scale-105">
+                            <i class="fas fa-sync-alt mr-2"></i>Atualizar QR Code
+                        </button>
+                    </form>
+                </div>
+
+                <!-- QR Code Preview -->
+                <div class="lg:col-span-2 bg-white/15 backdrop-blur-xl rounded-2xl shadow-2xl p-6 border-2 border-white/30">
+                    <h2 class="text-2xl font-bold text-white mb-4 text-center">
+                        <i class="fas fa-qrcode mr-2 text-yellow-300"></i>QR Code com URL
+                    </h2>
+                    
+                    <div id="qrPreviewContainer" class="qr-container max-w-md mx-auto mb-4">
+                        <img id="qrPreview" src="<?php echo $qrCodeUrl; ?>" alt="QR Code" class="w-full">
+                        <div class="qr-footer">
+                            <i class="fas fa-link mr-1"></i>
+                            <strong>URL:</strong> <?php echo $micrositeUrl; ?>
+                        </div>
                     </div>
 
                     <div class="space-y-3">
-                        <a href="<?php echo $qrCodeUrl; ?>&download=1" download="qrcode-devmenthors.png"
-                           class="block w-full gradient-accent hover:opacity-90 text-white font-bold py-4 px-6 rounded-xl text-center transition shadow-lg transform hover:scale-105">
-                            <i class="fas fa-download mr-2"></i>Baixar QR Code
-                        </a>
+                        <button onclick="downloadQRCode()" 
+                                class="block w-full gradient-accent hover:opacity-90 text-white font-bold py-4 px-6 rounded-xl text-center transition shadow-lg transform hover:scale-105">
+                            <i class="fas fa-download mr-2"></i>Baixar QR Code com URL
+                        </button>
+                        
+                        <button onclick="downloadQRCodeOnly()" 
+                                class="block w-full bg-picton-blue hover:opacity-90 text-white font-bold py-4 px-6 rounded-xl text-center transition shadow-lg transform hover:scale-105" style="background-color: var(--picton-blue);">
+                            <i class="fas fa-download mr-2"></i>Baixar QR Code (apenas imagem)
+                        </button>
                     </div>
                 </div>
+            </div>
 
-                <!-- Informações -->
+            <!-- Informações e Compartilhamento -->
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- URL e Ações -->
                 <div class="bg-white/15 backdrop-blur-xl rounded-2xl shadow-2xl p-6 border-2 border-white/30">
                     <h2 class="text-2xl font-bold text-white mb-4">
-                        <i class="fas fa-link mr-2 text-yellow-300"></i>Compartilhe
+                        <i class="fas fa-link mr-2 text-yellow-300"></i>URL da Página
                     </h2>
 
                     <div class="space-y-4">
                         <!-- URL -->
                         <div>
-                            <label class="block text-white text-sm font-bold mb-2">URL da Sua Página</label>
+                            <label class="block text-white text-sm font-bold mb-2">Copie e Compartilhe</label>
                             <div class="flex gap-2">
                                 <input type="text" id="micrositeUrl" value="<?php echo $micrositeUrl; ?>" readonly
-                                       class="flex-1 px-4 py-2 bg-white/10 text-white border-2 border-verdigris/50 rounded-xl backdrop-blur-sm">
+                                       class="flex-1 px-4 py-2 bg-white/10 text-white border-2 border-verdigris/50 rounded-xl backdrop-blur-sm font-mono text-sm">
                                 <button onclick="copyUrl()" 
                                         class="px-4 py-2 bg-picton-blue hover:opacity-90 text-white rounded-xl transition shadow-lg" style="background-color: var(--picton-blue);">
                                     <i class="fas fa-copy"></i>
@@ -101,33 +232,58 @@ $qrCodeUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=' . 
                            class="block w-full bg-green-blue hover:opacity-90 text-white font-bold py-4 px-6 rounded-xl text-center transition shadow-lg transform hover:scale-105" style="background-color: var(--green-blue);">
                             <i class="fas fa-home mr-2"></i>Voltar ao Início
                         </a>
+                    </div>
+                </div>
 
-                        <!-- Compartilhar nas redes -->
-                        <div class="pt-4 border-t border-blue-500/30">
-                            <p class="text-white text-sm font-bold mb-3">Compartilhar em:</p>
-                            <div class="flex gap-2">
-                                <a href="https://api.whatsapp.com/send?text=<?php echo urlencode('Confira meu perfil: ' . $micrositeUrl); ?>" 
-                                   target="_blank"
-                                   class="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg text-center transition">
-                                    <i class="fab fa-whatsapp"></i>
-                                </a>
-                                <a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo urlencode($micrositeUrl); ?>" 
-                                   target="_blank"
-                                   class="flex-1 bg-blue-700 hover:bg-blue-800 text-white py-2 px-4 rounded-lg text-center transition">
-                                    <i class="fab fa-facebook"></i>
-                                </a>
-                                <a href="https://twitter.com/intent/tweet?url=<?php echo urlencode($micrositeUrl); ?>&text=<?php echo urlencode('Confira meu perfil!'); ?>" 
-                                   target="_blank"
-                                   class="flex-1 bg-sky-500 hover:bg-sky-600 text-white py-2 px-4 rounded-lg text-center transition">
-                                    <i class="fab fa-twitter"></i>
-                                </a>
-                                <a href="https://t.me/share/url?url=<?php echo urlencode($micrositeUrl); ?>&text=<?php echo urlencode('Confira meu perfil!'); ?>" 
-                                   target="_blank"
-                                   class="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg text-center transition">
-                                    <i class="fab fa-telegram"></i>
-                                </a>
-                            </div>
-                        </div>
+                <!-- Compartilhar nas Redes -->
+                <div class="bg-white/15 backdrop-blur-xl rounded-2xl shadow-2xl p-6 border-2 border-white/30">
+                    <h2 class="text-2xl font-bold text-white mb-4">
+                        <i class="fas fa-share-alt mr-2 text-yellow-300"></i>Compartilhe
+                    </h2>
+
+                    <p class="text-white/80 mb-4 text-sm">Compartilhe sua página nas redes sociais</p>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <a href="https://api.whatsapp.com/send?text=<?php echo urlencode('Confira meu perfil: ' . $micrositeUrl); ?>" 
+                           target="_blank"
+                           class="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white py-4 px-4 rounded-xl text-center transition shadow-lg transform hover:scale-105">
+                            <i class="fab fa-whatsapp text-xl"></i>
+                            <span class="font-semibold">WhatsApp</span>
+                        </a>
+                        
+                        <a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo urlencode($micrositeUrl); ?>" 
+                           target="_blank"
+                           class="flex items-center justify-center gap-2 bg-blue-700 hover:bg-blue-800 text-white py-4 px-4 rounded-xl text-center transition shadow-lg transform hover:scale-105">
+                            <i class="fab fa-facebook text-xl"></i>
+                            <span class="font-semibold">Facebook</span>
+                        </a>
+                        
+                        <a href="https://twitter.com/intent/tweet?url=<?php echo urlencode($micrositeUrl); ?>&text=<?php echo urlencode('Confira meu perfil!'); ?>" 
+                           target="_blank"
+                           class="flex items-center justify-center gap-2 bg-sky-500 hover:bg-sky-600 text-white py-4 px-4 rounded-xl text-center transition shadow-lg transform hover:scale-105">
+                            <i class="fab fa-twitter text-xl"></i>
+                            <span class="font-semibold">Twitter</span>
+                        </a>
+                        
+                        <a href="https://t.me/share/url?url=<?php echo urlencode($micrositeUrl); ?>&text=<?php echo urlencode('Confira meu perfil!'); ?>" 
+                           target="_blank"
+                           class="flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white py-4 px-4 rounded-xl text-center transition shadow-lg transform hover:scale-105">
+                            <i class="fab fa-telegram text-xl"></i>
+                            <span class="font-semibold">Telegram</span>
+                        </a>
+                        
+                        <a href="https://www.linkedin.com/sharing/share-offsite/?url=<?php echo urlencode($micrositeUrl); ?>" 
+                           target="_blank"
+                           class="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white py-4 px-4 rounded-xl text-center transition shadow-lg transform hover:scale-105">
+                            <i class="fab fa-linkedin text-xl"></i>
+                            <span class="font-semibold">LinkedIn</span>
+                        </a>
+                        
+                        <a href="mailto:?subject=<?php echo urlencode('Confira meu perfil'); ?>&body=<?php echo urlencode($micrositeUrl); ?>" 
+                           class="flex items-center justify-center gap-2 bg-gray-600 hover:bg-gray-700 text-white py-4 px-4 rounded-xl text-center transition shadow-lg transform hover:scale-105">
+                            <i class="fas fa-envelope text-xl"></i>
+                            <span class="font-semibold">E-mail</span>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -148,12 +304,138 @@ $qrCodeUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=' . 
     </div>
 
     <script>
+        const micrositeUrl = '<?php echo $micrositeUrl; ?>';
+        const micrositeId = '<?php echo $micrositeId; ?>';
+        
+        // Sincronizar inputs de cor
+        document.getElementById('qrColor').addEventListener('input', function() {
+            const hex = this.value.replace('#', '');
+            document.getElementById('qrColorText').value = hex;
+        });
+        
+        document.getElementById('qrColorText').addEventListener('input', function() {
+            const hex = this.value.replace('#', '');
+            if (hex.length === 6) {
+                document.getElementById('qrColor').value = '#' + hex;
+            }
+        });
+        
+        document.getElementById('qrBgColor').addEventListener('input', function() {
+            const hex = this.value.replace('#', '');
+            document.getElementById('qrBgColorText').value = hex;
+        });
+        
+        document.getElementById('qrBgColorText').addEventListener('input', function() {
+            const hex = this.value.replace('#', '');
+            if (hex.length === 6) {
+                document.getElementById('qrBgColor').value = '#' + hex;
+            }
+        });
+        
+        // Atualizar valores dos sliders
+        document.getElementById('qrSize').addEventListener('input', function() {
+            document.getElementById('qrSizeValue').textContent = this.value + 'px';
+        });
+        
+        document.getElementById('qrMargin').addEventListener('input', function() {
+            document.getElementById('qrMarginValue').textContent = this.value;
+        });
+        
+        // Atualizar QR Code
+        function updateQRCode() {
+            const size = document.getElementById('qrSize').value;
+            const color = document.getElementById('qrColorText').value.replace('#', '');
+            const bgcolor = document.getElementById('qrBgColorText').value.replace('#', '');
+            const margin = document.getElementById('qrMargin').value;
+            const format = document.getElementById('qrFormat').value;
+            
+            // Construir nova URL
+            const newUrl = window.location.pathname + 
+                '?id=' + micrositeId +
+                '&size=' + size +
+                '&color=' + color +
+                '&bgcolor=' + bgcolor +
+                '&margin=' + margin +
+                '&format=' + format;
+            
+            // Atualizar URL sem recarregar
+            window.history.pushState({}, '', newUrl);
+            
+            // Atualizar imagem do QR Code
+            const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?' + 
+                'size=' + size + 'x' + size +
+                '&data=' + encodeURIComponent(micrositeUrl) +
+                '&color=' + color +
+                '&bgcolor=' + bgcolor +
+                '&margin=' + margin +
+                '&format=' + format;
+            
+            document.getElementById('qrPreview').src = qrUrl;
+            
+            // Feedback visual
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check mr-2"></i>Atualizado!';
+            btn.classList.add('opacity-90');
+            
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.classList.remove('opacity-90');
+            }, 2000);
+        }
+        
+        // Baixar QR Code com URL (usando html2canvas)
+        function downloadQRCode() {
+            // Criar um canvas temporário
+            const container = document.getElementById('qrPreviewContainer');
+            
+            // Usar html2canvas para capturar o container
+            html2canvas(container, {
+                backgroundColor: '#ffffff',
+                scale: 2
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'qrcode-devmenthors-com-url.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+        
+        // Baixar apenas QR Code
+        function downloadQRCodeOnly() {
+            const size = document.getElementById('qrSize').value;
+            const color = document.getElementById('qrColorText').value.replace('#', '');
+            const bgcolor = document.getElementById('qrBgColorText').value.replace('#', '');
+            const margin = document.getElementById('qrMargin').value;
+            const format = document.getElementById('qrFormat').value;
+            
+            const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?' + 
+                'size=' + size + 'x' + size +
+                '&data=' + encodeURIComponent(micrositeUrl) +
+                '&color=' + color +
+                '&bgcolor=' + bgcolor +
+                '&margin=' + margin +
+                '&format=' + format +
+                '&download=1';
+            
+            window.open(qrUrl, '_blank');
+        }
+        
         function copyUrl() {
             const input = document.getElementById('micrositeUrl');
             input.select();
             document.execCommand('copy');
-            alert('URL copiada para a área de transferência!');
+            
+            // Feedback visual
+            const originalPlaceholder = input.placeholder;
+            input.placeholder = '✓ Copiado!';
+            setTimeout(() => {
+                input.placeholder = originalPlaceholder;
+            }, 2000);
         }
     </script>
+    
+    <!-- html2canvas para capturar QR Code com URL -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </body>
 </html>
