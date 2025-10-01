@@ -284,4 +284,44 @@ INSERT INTO `settings` (`key`, `value`, `type`, `description`) VALUES
 ('allow_registration', '1', 'boolean', 'Permitir novos cadastros'),
 ('require_email_verification', '1', 'boolean', 'Requer verificação de email');
 
+-- --------------------------------------------------------
+-- Tabela de Fila de Emails
+-- --------------------------------------------------------
+
+CREATE TABLE `email_queue` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `to_email` varchar(255) NOT NULL,
+  `to_name` varchar(255) DEFAULT NULL,
+  `subject` varchar(255) NOT NULL,
+  `body` text NOT NULL,
+  `attachments` text DEFAULT NULL COMMENT 'JSON com anexos',
+  `status` enum('pending','processing','sent','failed') DEFAULT 'pending',
+  `attempts` int(11) DEFAULT 0,
+  `error` text DEFAULT NULL,
+  `scheduled_at` datetime DEFAULT NULL COMMENT 'Quando deve ser enviado',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `sent_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `status` (`status`),
+  KEY `scheduled_at` (`scheduled_at`),
+  KEY `created_at` (`created_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+-- Tabela de Logs de Email
+-- --------------------------------------------------------
+
+CREATE TABLE `email_logs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `to_email` varchar(255) NOT NULL,
+  `subject` varchar(255) NOT NULL,
+  `status` enum('sent','failed') NOT NULL,
+  `error` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `to_email` (`to_email`),
+  KEY `status` (`status`),
+  KEY `created_at` (`created_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 COMMIT;

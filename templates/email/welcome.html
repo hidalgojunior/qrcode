@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bem-vindo ao DevMenthors</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            color: #ffffff;
+            margin: 0;
+            font-size: 32px;
+        }
+        .header p {
+            color: #ffffff;
+            margin: 10px 0 0;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 40px 30px;
+        }
+        .greeting {
+            font-size: 24px;
+            color: #333333;
+            margin-bottom: 20px;
+        }
+        .message {
+            font-size: 16px;
+            color: #666666;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        .plan-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        .button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        .features {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            font-size: 15px;
+            color: #333333;
+        }
+        .feature-icon {
+            color: #667eea;
+            margin-right: 12px;
+            font-size: 20px;
+        }
+        .footer {
+            background-color: #f8f9fa;
+            padding: 30px 20px;
+            text-align: center;
+            border-top: 1px solid #e0e0e0;
+        }
+        .footer p {
+            color: #999999;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+        .social-links {
+            margin: 20px 0;
+        }
+        .social-links a {
+            display: inline-block;
+            margin: 0 10px;
+            color: #667eea;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎉 Bem-vindo ao DevMenthors!</h1>
+            <p>Sua jornada digital começa agora</p>
+        </div>
+        
+        <div class="content">
+            <div class="greeting">Olá, {{name}}!</div>
+            
+            <div class="message">
+                É com grande prazer que damos as boas-vindas ao <strong>DevMenthors</strong>! 
+                Sua conta foi criada com sucesso e você já pode começar a explorar todas as 
+                funcionalidades da nossa plataforma.
+            </div>
+            
+            <div style="text-align: center;">
+                <div class="plan-badge">📦 Plano: {{plan_name}}</div>
+            </div>
+            
+            <div class="features">
+                <div class="feature-item">
+                    <span class="feature-icon">✅</span>
+                    <span>Crie microsites personalizados com seu próprio estilo</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✅</span>
+                    <span>Gere QR Codes ilimitados para seus projetos</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✅</span>
+                    <span>Acompanhe estatísticas em tempo real</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✅</span>
+                    <span>Widgets personalizáveis (links, PIX, galeria, música e mais)</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✅</span>
+                    <span>Suporte dedicado sempre que precisar</span>
+                </div>
+            </div>
+            
+            <div style="text-align: center;">
+                <a href="{{dashboard_url}}" class="button">Acessar Meu Dashboard</a>
+            </div>
+            
+            <div class="message" style="margin-top: 40px;">
+                <strong>Próximos passos:</strong>
+                <ol style="color: #666666; line-height: 1.8;">
+                    <li>Acesse seu <a href="{{dashboard_url}}" style="color: #667eea;">dashboard</a></li>
+                    <li>Complete seu perfil</li>
+                    <li>Crie seu primeiro microsite</li>
+                    <li>Gere QR Codes personalizados</li>
+                    <li>Compartilhe com o mundo! 🚀</li>
+                </ol>
+            </div>
+            
+            <div class="message">
+                Se tiver alguma dúvida ou precisar de ajuda, nossa equipe está sempre disponível 
+                para te auxiliar. Basta responder este email!
+            </div>
+            
+            <div class="message" style="color: #999999; font-size: 14px; margin-top: 40px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
+                <strong>Dica:</strong> Salve este email para referência futura. Ele contém 
+                informações importantes sobre sua conta.
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p><strong>{{company_name}}</strong></p>
+            <p>A plataforma completa para sua presença digital</p>
+            
+            <div class="social-links">
+                <a href="#">Facebook</a> | 
+                <a href="#">Instagram</a> | 
+                <a href="#">Twitter</a> | 
+                <a href="#">LinkedIn</a>
+            </div>
+            
+            <p>{{base_url}}</p>
+            <p>&copy; {{year}} {{company_name}}. Todos os direitos reservados.</p>
+            
+            <p style="font-size: 12px; margin-top: 20px;">
+                Você está recebendo este email porque criou uma conta no DevMenthors.<br>
+                <a href="#" style="color: #999999;">Gerenciar preferências de email</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

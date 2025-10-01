@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamento Confirmado</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+        }
+        .header {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            padding: 40px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            color: #ffffff;
+            margin: 0;
+            font-size: 32px;
+        }
+        .success-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+        .content {
+            padding: 40px 30px;
+        }
+        .greeting {
+            font-size: 24px;
+            color: #333333;
+            margin-bottom: 20px;
+        }
+        .message {
+            font-size: 16px;
+            color: #666666;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        .payment-details {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border-left: 4px solid #10b981;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 12px 0;
+            font-size: 16px;
+        }
+        .detail-label {
+            color: #666666;
+            font-weight: 500;
+        }
+        .detail-value {
+            color: #333333;
+            font-weight: bold;
+        }
+        .amount {
+            font-size: 32px;
+            color: #10b981;
+            text-align: center;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .button {
+            display: inline-block;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        .features-box {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            font-size: 15px;
+            color: #333333;
+        }
+        .feature-icon {
+            color: #10b981;
+            margin-right: 12px;
+            font-size: 20px;
+        }
+        .footer {
+            background-color: #f8f9fa;
+            padding: 30px 20px;
+            text-align: center;
+            border-top: 1px solid #e0e0e0;
+        }
+        .footer p {
+            color: #999999;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="success-icon">✅</div>
+            <h1>Pagamento Confirmado!</h1>
+        </div>
+        
+        <div class="content">
+            <div class="greeting">Olá, {{name}}!</div>
+            
+            <div class="message">
+                Temos ótimas notícias! Seu pagamento foi <strong>confirmado com sucesso</strong> e 
+                sua assinatura do plano <strong>{{plan_name}}</strong> já está ativa.
+            </div>
+            
+            <div class="payment-details">
+                <h3 style="margin-top: 0; color: #10b981;">Detalhes do Pagamento</h3>
+                
+                <div class="amount">R$ {{amount}}</div>
+                
+                <div class="detail-row">
+                    <span class="detail-label">Plano:</span>
+                    <span class="detail-value">{{plan_name}}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">ID da Transação:</span>
+                    <span class="detail-value">{{transaction_id}}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Método:</span>
+                    <span class="detail-value">PIX</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Status:</span>
+                    <span class="detail-value" style="color: #10b981;">✅ Pago</span>
+                </div>
+            </div>
+            
+            <div class="features-box">
+                <h3 style="margin-top: 0; color: #333333;">Recursos Liberados:</h3>
+                <div class="feature-item">
+                    <span class="feature-icon">🚀</span>
+                    <span>Acesso completo ao plano {{plan_name}}</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">📱</span>
+                    <span>Microsites ilimitados ou conforme seu plano</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">🎨</span>
+                    <span>QR Codes personalizados sem marca d'água</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">📊</span>
+                    <span>Analytics completo e relatórios detalhados</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">🎯</span>
+                    <span>Suporte prioritário</span>
+                </div>
+            </div>
+            
+            <div style="text-align: center;">
+                <a href="{{dashboard_url}}" class="button">Acessar Dashboard</a>
+            </div>
+            
+            <div class="message" style="margin-top: 40px;">
+                <strong>Precisa da nota fiscal?</strong><br>
+                Você pode baixar sua fatura a qualquer momento através do seu dashboard ou 
+                <a href="{{invoice_url}}" style="color: #10b981;">clicando aqui</a>.
+            </div>
+            
+            <div class="message" style="color: #999999; font-size: 14px; margin-top: 40px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
+                <strong>Informações importantes:</strong><br>
+                • Sua assinatura será renovada automaticamente (quando disponível)<br>
+                • Você pode cancelar a qualquer momento<br>
+                • Guarde este email como comprovante de pagamento
+            </div>
+            
+            <div class="message">
+                Se tiver alguma dúvida sobre sua assinatura, entre em contato conosco. 
+                Estamos aqui para ajudar! 🎉
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p><strong>{{company_name}}</strong></p>
+            <p>{{base_url}}</p>
+            <p>&copy; {{year}} {{company_name}}. Todos os direitos reservados.</p>
+            
+            <p style="font-size: 12px; margin-top: 20px;">
+                Este é um email automático de confirmação de pagamento.<br>
+                ID da transação: {{transaction_id}}
+            </p>
+        </div>
+    </div>
+</body>
+</html>
