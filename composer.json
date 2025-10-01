@@ -21,6 +21,7 @@
         "ext-gd": "*",
         "ext-json": "*",
         "ext-mbstring": "*",
+        "php-imap/php-imap": "^5.0",
         "phpmailer/phpmailer": "^6.11"
     },
     "require-dev": {
