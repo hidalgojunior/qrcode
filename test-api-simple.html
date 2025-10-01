@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teste API Fetch</title>
+    <script>
+        async function testFetch() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<p>Carregando...</p>';
+            
+            try {
+                console.log('Fazendo requisição...');
+                const response = await fetch('/QrCode/api/inbox.php?action=fetch');
+                
+                console.log('Status:', response.status);
+                console.log('Headers:', response.headers);
+                
+                const text = await response.text();
+                console.log('Response text:', text);
+                
+                if (!text) {
+                    resultDiv.innerHTML = '<p style="color: red;">Resposta vazia!</p>';
+                    return;
+                }
+                
+                try {
+                    const data = JSON.parse(text);
+                    resultDiv.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                } catch (e) {
+                    resultDiv.innerHTML = '<p style="color: red;">Erro ao parsear JSON: ' + e.message + '</p><pre>' + text + '</pre>';
+                }
+                
+            } catch (error) {
+                console.error('Erro:', error);
+                resultDiv.innerHTML = '<p style="color: red;">Erro: ' + error.message + '</p>';
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Teste API Fetch</h1>
+    <button onclick="testFetch()">Testar Fetch</button>
+    <div id="result"></div>
+</body>
+</html>

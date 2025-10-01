@@ -88,7 +88,13 @@ class InboxManager {
             $mailIds = $this->mailbox->searchMailbox('UNSEEN');
             
             if (empty($mailIds)) {
-                return ['success' => true, 'message' => 'Nenhum email novo', 'count' => 0];
+                return [
+                    'success' => true, 
+                    'message' => 'Nenhum email novo', 
+                    'processed' => 0,
+                    'total' => 0,
+                    'errors' => []
+                ];
             }
             
             // Limitar quantidade
@@ -433,7 +439,12 @@ class InboxManager {
      * Estatísticas da caixa de entrada
      */
     public function getStats() {
-        $stats = [];
+        $stats = [
+            'by_status' => [],
+            'by_category' => [],
+            'total' => 0,
+            'unread' => 0
+        ];
         
         // Total por status
         $result = $this->db->query("
@@ -442,8 +453,8 @@ class InboxManager {
             GROUP BY status
         ");
         
-        while ($row = $result->fetch_assoc()) {
-            $stats['by_status'][$row['status']] = $row['count'];
+        while ($row = $result->fetch()) {
+            $stats['by_status'][$row['status']] = (int)$row['count'];
         }
         
         // Total por categoria
@@ -453,17 +464,19 @@ class InboxManager {
             GROUP BY category
         ");
         
-        while ($row = $result->fetch_assoc()) {
-            $stats['by_category'][$row['category']] = $row['count'];
+        while ($row = $result->fetch()) {
+            $stats['by_category'][$row['category']] = (int)$row['count'];
         }
         
         // Total geral
         $result = $this->db->query("SELECT COUNT(*) as total FROM inbox_emails");
-        $stats['total'] = $result->fetch_assoc()['total'];
+        $row = $result->fetch();
+        $stats['total'] = (int)($row['total'] ?? 0);
         
         // Não lidos
         $result = $this->db->query("SELECT COUNT(*) as unread FROM inbox_emails WHERE status = 'unread'");
-        $stats['unread'] = $result->fetch_assoc()['unread'];
+        $row = $result->fetch();
+        $stats['unread'] = (int)($row['unread'] ?? 0);
         
         return $stats;
     }

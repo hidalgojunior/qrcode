@@ -112,13 +112,26 @@ try {
                 
             case 'fetch':
                 // Buscar novos emails do servidor
-                $result = $inbox->fetchNewEmails(50);
-                
-                echo json_encode([
-                    'success' => $result['success'],
-                    'result' => $result,
-                    'stats' => $inbox->getStats()
-                ]);
+                try {
+                    error_log("API Inbox: Iniciando fetch de emails");
+                    $result = $inbox->fetchNewEmails(50);
+                    error_log("API Inbox: Fetch concluído - " . json_encode($result));
+                    
+                    $stats = $inbox->getStats();
+                    error_log("API Inbox: Stats obtidas - " . json_encode($stats));
+                    
+                    echo json_encode([
+                        'success' => $result['success'],
+                        'result' => $result,
+                        'stats' => $stats
+                    ]);
+                } catch (Exception $e) {
+                    error_log("API Inbox: Erro no fetch - " . $e->getMessage());
+                    echo json_encode([
+                        'success' => false,
+                        'error' => 'Erro ao buscar emails: ' . $e->getMessage()
+                    ]);
+                }
                 break;
                 
             case 'test':
