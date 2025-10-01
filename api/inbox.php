@@ -12,21 +12,35 @@
 
 header('Content-Type: application/json');
 
-require_once __DIR__ . '/../includes/database.php';
-require_once __DIR__ . '/../includes/inbox.php';
-require_once __DIR__ . '/../vendor/autoload.php';
+// Capturar erros e converter para JSON
+error_reporting(E_ALL);
+ini_set('display_errors', 0);
 
-// Verificar autenticação (simplificado - em produção use sessão real)
-session_start();
+try {
+    require_once __DIR__ . '/../includes/database.php';
+    require_once __DIR__ . '/../includes/inbox.php';
+    require_once __DIR__ . '/../vendor/autoload.php';
 
-// TODO: Adicionar verificação de autenticação real
-// if (!isset($_SESSION['user_id'])) {
-//     http_response_code(401);
-//     echo json_encode(['success' => false, 'error' => 'Não autenticado']);
-//     exit;
-// }
+    // Verificar autenticação (simplificado - em produção use sessão real)
+    session_start();
 
-$inbox = new InboxManager();
+    // TODO: Adicionar verificação de autenticação real
+    // if (!isset($_SESSION['user_id'])) {
+    //     http_response_code(401);
+    //     echo json_encode(['success' => false, 'error' => 'Não autenticado']);
+    //     exit;
+    // }
+
+    $inbox = new InboxManager();
+} catch (Exception $e) {
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'error' => 'Erro ao inicializar: ' . $e->getMessage(),
+        'trace' => $e->getTraceAsString()
+    ]);
+    exit;
+}
 
 try {
     // GET requests

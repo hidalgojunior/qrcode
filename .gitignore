@@ -45,6 +45,10 @@ config.local.php
 /uploads/*
 !/uploads/.gitkeep
 
+# Attachments de emails
+/attachments/*
+!/attachments/.gitkeep
+
 # Node modules (se usar)
 node_modules/
 package-lock.json
