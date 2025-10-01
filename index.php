@@ -38,17 +38,13 @@
                     <i class="fas fa-moon text-xl"></i>
                 </button>
             </div>
-            <p class="text-white/90 text-lg" id="subtitle">Crie QR Codes personalizados gratuitamente</p>
-            
-            <!-- Botão DevMenthors -->
-            <div class="mt-4">
-                <a href="create-devmenthors.php" 
-                   class="inline-flex items-center gap-2 px-6 py-3 gradient-accent hover:opacity-90 text-white font-bold rounded-full transition duration-300 transform hover:scale-105 shadow-lg">
-                    <i class="fas fa-id-card"></i>
-                    <span>Criar DevMenthors</span>
-                    <span class="text-xs bg-white/20 px-2 py-1 rounded-full">NOVO</span>
+            <p class="text-white/90 text-lg mb-2" id="subtitle">Crie QR Codes personalizados</p>
+            <p class="text-white/70 text-sm">
+                ✨ Plano Grátis: QR Codes com marca d'água • 🎨 Premium: Personalize cores e tamanhos
+                <a href="qrcode-plans.php" class="text-yellow-300 hover:text-yellow-100 underline ml-2">
+                    Ver Planos Premium
                 </a>
-            </div>
+            </p>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
