@@ -1,0 +1,7 @@
+[2025-10-01 11:32:52] [INFO] QR Code gerado: phone, tamanho: 300, arquivo: qrcode_1759318370_9945.png
+[2025-10-01 11:32:53] [INFO] QR Code gerado: phone, tamanho: 300, arquivo: qrcode_1759318372_3356.png
+[2025-10-01 11:36:16] [INFO] QR Code gerado: text, tamanho: 300, arquivo: qrcode_1759318575_3372.png
+[2025-10-01 11:43:20] [INFO] QR Code gerado: vcard, tamanho: 300, arquivo: qrcode_1759318999_8940.png
+[2025-10-01 12:08:04] [WARNING] Validação falhou para tipo: phone
+[2025-10-01 12:49:09] [WARNING] Validação falhou para tipo: phone
+[2025-10-01 12:49:26] [WARNING] Validação falhou para tipo: text

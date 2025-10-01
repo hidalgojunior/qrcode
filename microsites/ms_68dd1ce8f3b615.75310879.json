@@ -1,0 +1,31 @@
+{
+    "name": "DevMenthors",
+    "title": "Desenvolvedores de Sistemas",
+    "bio": "",
+    "avatar": "",
+    "theme": {
+        "gradient_start": "#b2b8d2",
+        "gradient_end": "#330d59"
+    },
+    "social": [
+        {
+            "name": "instagram",
+            "icon": "fab fa-instagram",
+            "url": "https:\/\/www.instagram.com\/devmenthors\/"
+        }
+    ],
+    "widgets": [
+        {
+            "type": "music",
+            "title": "Musicas para Devs",
+            "artist": "",
+            "music_url": "https:\/\/open.spotify.com\/playlist\/5sAOt3noFZPystox3OUN29?si=f14385fdf6694bfe",
+            "cover": ""
+        }
+    ],
+    "contact": {
+        "email": "devmenthors@devmenthors.com.br",
+        "phone": "14981364342",
+        "whatsapp": "5514981364342"
+    }
+}
