@@ -1,226 +1,303 @@
-# 🔗 Gerador de QR Code
+# 🎨 QR Code Generator & DevMenthors
 
-Um sistema completo em PHP para gerar QR codes de diferentes tipos de forma rápida e intuitiva.
+Sistema completo de geração de QR Codes personalizados e criação de microsites (DevMenthors) com design moderno e responsivo.
 
-## 📋 Características
+![PHP Version](https://img.shields.io/badge/PHP-%3E%3D7.4-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Status](https://img.shields.io/badge/status-active-success)
 
-- **Múltiplos tipos de QR Code:**
-  - 📝 Texto simples
-  - 🔗 URLs/Links
-  - 📧 Email (com assunto e mensagem)
-  - 📞 Telefone
-  - 💬 SMS
-  - 📶 WiFi (conexão automática)
-  - 👤 Cartão de visita (vCard)
+## 📋 Índice
 
-- **Configurações flexíveis:**
-  - Diferentes tamanhos (200x200 a 500x500)
-  - Níveis de correção de erro
-  - Download em PNG e JPG
-  - Função de impressão
-  - Compartilhamento via WhatsApp e email
+- [Características](#-características)
+- [Requisitos](#-requisitos)
+- [Instalação](#-instalação)
+- [Configuração](#️-configuração)
+- [Deploy Automático](#-deploy-automático)
+- [Estrutura do Projeto](#-estrutura-do-projeto)
+- [Uso](#-uso)
+- [Tecnologias](#-tecnologias)
+- [Licença](#-licença)
+
+## ✨ Características
+
+### 🔲 Gerador de QR Code
+- 7 tipos de QR Code (Texto, URL, Email, Telefone, SMS, WiFi, vCard)
+- Personalização completa (cores, tamanho, logo)
+- Download em múltiplos formatos (PNG, SVG, EPS)
+- QR Code com URL no rodapé
+- Tema claro/escuro
+
+### 🌐 DevMenthors (Microsites)
+- **Criação de páginas personalizadas** com QR Code único
+- **Upload de avatar** ou URL de imagem
+- **Widgets dinâmicos**: Links, PIX, Galeria, Música, Vídeo, Texto, Localização
+- **Preview em tempo real**: Mobile e Desktop
+- **URL personalizada** (slugs amigáveis)
+- **Temas de cores** customizáveis
+- **Redes sociais** integradas
+- **Compartilhamento** direto
+
+### 🎨 Design
+- Interface moderna com **Tailwind CSS**
+- **Glassmorphism** e efeitos visuais
+- **Paleta de cores vibrante** (5 cores principais)
+- **Responsivo** (mobile-first)
+- **Animações suaves**
+
+## 📦 Requisitos
+
+- **PHP** >= 7.4
+- **Extensões PHP**:
+  - `gd` (manipulação de imagens)
+  - `json` (processamento JSON)
+  - `mbstring` (strings multibyte)
+- **Servidor Web** (Apache/Nginx)
+- **Composer** (para gerenciamento de dependências)
 
 ## 🚀 Instalação
 
-### Requisitos
-- PHP 7.4 ou superior
-- Extensão GD ativada
-- Servidor web (Apache/Nginx)
-- Acesso à internet (para geração de QR codes)
+### 1. Clone o repositório
 
-### Passos de instalação
+```bash
+git clone https://github.com/hidalgojunior/qrcode.git
+cd qrcode
+```
 
-1. **Clone ou baixe os arquivos**
-   ```bash
-   git clone [URL_DO_REPOSITORIO]
-   # ou baixe e extraia o ZIP
-   ```
+### 2. Instale as dependências
 
-2. **Configure as permissões**
-   ```bash
-   chmod 755 qrcodes/
-   chmod 755 logs/
-   chmod 755 tmp/
-   ```
+```bash
+composer install
+```
 
-3. **Configure o servidor web**
-   - Aponte o document root para a pasta do projeto
-   - Certifique-se de que o mod_rewrite está ativado (Apache)
+### 3. Configure as permissões
 
-4. **Teste a instalação**
-   - Acesse `http://localhost/QrCode/` (ou seu domínio)
-   - Crie um QR code de teste
+```bash
+chmod 755 microsites qrcodes
+```
 
-## 📁 Estrutura do Projeto
+### 4. Verifique a instalação
+
+```bash
+composer check-permissions
+```
+
+### 5. Acesse no navegador
 
 ```
-QrCode/
-├── assets/
-│   ├── css/
-│   │   └── style.css          # Estilos do sistema
-│   └── js/
-│       └── script.js          # JavaScript para formulários
-├── lib/
-│   └── QRCodeGenerator.php    # Classe principal para geração
-├── qrcodes/                   # Diretório dos QR codes gerados
-├── logs/                      # Logs do sistema
-├── tmp/                       # Arquivos temporários
-├── index.php                  # Página principal
-├── generate.php               # Processamento do formulário
-├── result.php                 # Exibição do resultado
-├── download.php               # Download dos arquivos
-├── help.php                   # Página de ajuda
-├── config.php                 # Configurações do sistema
-├── .htaccess                  # Configurações do Apache
-└── README.md                  # Este arquivo
+http://localhost/QrCode
 ```
 
 ## ⚙️ Configuração
 
-### Configurações principais (config.php)
+### Arquivo `config.php`
+
+Edite o arquivo `config.php` para personalizar:
 
 ```php
-// Tamanho padrão dos QR codes
-define('DEFAULT_SIZE', 300);
+<?php
+// Diretório para armazenar microsites
+define('MICROSITE_DIR', __DIR__ . '/microsites');
 
-// Limpeza automática de arquivos antigos
-define('AUTO_CLEANUP_ENABLED', true);
-define('MAX_FILE_AGE_HOURS', 24);
+// Diretório para QR Codes
+define('QRCODE_DIR', __DIR__ . '/qrcodes');
 
-// Limite de requisições por hora
-define('RATE_LIMIT_ENABLED', true);
-define('MAX_REQUESTS_PER_HOUR', 100);
+// URL base do site (para produção)
+define('BASE_URL', 'https://seudominio.com');
 ```
 
-### Configurações do servidor
+### Variáveis de Ambiente (opcional)
 
-Para **Apache**, o arquivo `.htaccess` já está configurado.
+Crie um arquivo `.env` para configurações locais:
 
-Para **Nginx**, adicione ao seu arquivo de configuração:
-```nginx
-location ~* \.(log|txt)$ {
-    deny all;
-}
-
-location /logs/ {
-    deny all;
-}
-
-location /tmp/ {
-    deny all;
-}
+```env
+APP_ENV=production
+APP_DEBUG=false
+BASE_URL=https://seudominio.com
 ```
 
-## 🎯 Como Usar
+## 🌍 Deploy Automático
 
-1. **Acesse a página principal**
-2. **Selecione o tipo de QR Code** que deseja criar
-3. **Preencha os campos** conforme o tipo selecionado
-4. **Configure o tamanho** e nível de correção de erro
-5. **Clique em "Gerar QR Code"**
-6. **Baixe, imprima ou compartilhe** seu QR code
+### Deploy Simples
 
-## 📱 Tipos de QR Code
+```bash
+composer deploy
+```
 
-### Texto
-Ideal para mensagens simples, notas ou qualquer texto.
+Este comando:
+1. Instala dependências de produção
+2. Otimiza autoloader
+3. Cria diretórios necessários
+4. Verifica permissões
 
-### URL/Link
-Para direcionar usuários a websites específicos.
+### Deploy em Produção (exemplo)
 
-### Email
-Pré-preenche o aplicativo de email com destinatário, assunto e mensagem.
+#### Via Git Hooks
 
-### Telefone
-Inicia uma chamada telefônica automaticamente.
+Crie `.git/hooks/post-receive`:
 
-### SMS
-Pré-preenche uma mensagem SMS.
+```bash
+#!/bin/bash
+cd /var/www/html/qrcode
+git pull origin main
+composer deploy
+composer check-permissions
+echo "Deploy concluído!"
+```
 
-### WiFi
-Permite conexão automática a redes WiFi sem digitar senhas.
+#### Via CI/CD (GitHub Actions)
 
-### Cartão de Visita (vCard)
-Adiciona contato diretamente à agenda do celular.
+Crie `.github/workflows/deploy.yml`:
 
-## 🔧 Personalização
+```yaml
+name: Deploy
 
-### Modificar estilos
-Edite o arquivo `assets/css/style.css` para personalizar a aparência.
+on:
+  push:
+    branches: [ main ]
 
-### Adicionar novos tipos
-1. Modifique o formulário em `index.php`
-2. Atualize a classe `QRCodeGenerator.php`
-3. Adicione validação em `assets/js/script.js`
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          extensions: gd, json, mbstring
+      
+      - name: Install dependencies
+        run: composer deploy
+      
+      - name: Deploy to server
+        run: |
+          # Seu comando de deploy (FTP, SSH, etc)
+```
 
-### Configurar API alternativa
-Modifique o método `generateQRCode()` na classe `QRCodeGenerator` para usar outras APIs.
+## 📁 Estrutura do Projeto
 
-## 🛡️ Segurança
+```
+qrcode/
+├── assets/
+│   ├── css/
+│   └── js/
+│       ├── script.js
+│       └── devmenthors-editor.js
+├── lib/
+│   └── phpqrcode/
+├── microsites/           # Dados dos microsites (JSON)
+│   └── .gitkeep
+├── qrcodes/             # QR Codes gerados
+│   └── .gitkeep
+├── src/                 # Classes PHP (futuro)
+├── config.php           # Configurações
+├── index.php            # Gerador de QR Code
+├── create-devmenthors.php   # Criação de microsite
+├── devmenthors.php      # Visualização de microsite
+├── devmenthors-result.php   # Resultado com QR personalizado
+├── save-devmenthors.php     # API para salvar
+├── check-slug.php       # API para verificar slug
+├── generate.php         # Geração de QR Code
+├── composer.json
+├── .gitignore
+└── README.md
+```
 
-- Rate limiting por IP
-- Validação de entrada
-- Sanitização de dados
-- Proteção contra XSS
-- Limpeza automática de arquivos
-- Logs de atividade
+## 💻 Uso
 
-## 📊 Logs
+### 1. Gerar QR Code Simples
 
-O sistema gera logs em `logs/activity.log` com informações sobre:
-- QR codes gerados
-- Erros ocorridos
-- Tentativas de acesso bloqueadas
+1. Acesse `index.php`
+2. Escolha o tipo de QR Code
+3. Preencha os dados
+4. Personalize cores e tamanho
+5. Clique em "Gerar QR Code"
 
-## 🚨 Troubleshooting
+### 2. Criar DevMenthors (Microsite)
 
-### QR codes não são gerados
-1. Verifique se a extensão GD está ativada
-2. Confirme se há acesso à internet
-3. Verifique permissões da pasta `qrcodes/`
+1. Clique em "Criar DevMenthors"
+2. Preencha informações básicas
+3. Faça upload do avatar
+4. Adicione redes sociais
+5. Insira widgets (opcional)
+6. Visualize preview (mobile/desktop)
+7. Clique em "Criar DevMenthors"
+8. Personalize e baixe o QR Code
 
-### Erro 500
-1. Verifique os logs do PHP
-2. Confirme se todas as dependências estão instaladas
-3. Verifique permissões de arquivos e pastas
+### 3. Compartilhar
 
-### QR codes não funcionam
-1. Teste com diferentes aplicativos de leitura
-2. Verifique se os dados estão corretos
-3. Tente um nível de correção de erro mais alto
+- Copie a URL gerada
+- Use o QR Code em cartões de visita
+- Compartilhe nas redes sociais
+- Integre em materiais de marketing
 
-## 📈 Melhorias Futuras
+## 🛠️ Tecnologias
 
-- [ ] Histórico de QR codes gerados
-- [ ] Personalização de cores
-- [ ] Logos em QR codes
-- [ ] API REST para integração
-- [ ] Batch generation (múltiplos QR codes)
-- [ ] Analytics de uso
+### Backend
+- **PHP 7.4+** - Linguagem server-side
+- **Composer** - Gerenciador de dependências
+- **PHPQRCode** - Geração de QR Codes
 
-## 🤝 Contribuição
+### Frontend
+- **Tailwind CSS** - Framework CSS utility-first
+- **Font Awesome** - Ícones
+- **html2canvas** - Captura de elementos HTML
+- **JavaScript ES6+** - Interatividade
+
+### APIs Externas
+- **QR Server API** - Geração de QR Codes personalizados
+
+## 🎨 Paleta de Cores
+
+```css
+--green-blue: #2364aa    /* Azul profundo */
+--picton-blue: #3da5d9   /* Azul vibrante */
+--verdigris: #73bfb8     /* Verde-azulado */
+--mikado-yellow: #fec601 /* Amarelo intenso */
+--pumpkin: #ea7317       /* Laranja enérgico */
+```
+
+## 📝 Scripts Composer
+
+```bash
+# Instalar dependências
+composer install
+
+# Deploy em produção
+composer deploy
+
+# Verificar permissões
+composer check-permissions
+
+# Executar testes (quando implementados)
+composer test
+```
+
+## 🤝 Contribuindo
 
 1. Fork o projeto
-2. Crie uma branch para sua feature
-3. Commit suas mudanças
-4. Push para a branch
+2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a branch (`git push origin feature/AmazingFeature`)
 5. Abra um Pull Request
 
 ## 📄 Licença
 
-Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
-
-## 🆘 Suporte
-
-Para reportar bugs ou solicitar features:
-1. Abra uma issue no GitHub
-2. Inclua informações sobre seu ambiente
-3. Descreva o problema detalhadamente
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 ## 👨‍💻 Autor
 
-Desenvolvido com ❤️ por [Seu Nome]
+**Hidalgo Junior**
+- GitHub: [@hidalgojunior](https://github.com/hidalgojunior)
+
+## 🙏 Agradecimentos
+
+- [Tailwind CSS](https://tailwindcss.com)
+- [Font Awesome](https://fontawesome.com)
+- [QR Server API](https://goqr.me/api/)
+- [PHPQRCode](http://phpqrcode.sourceforge.net/)
 
 ---
 
-**🔗 Gerador de QR Code** - Transformando dados em códigos visuais desde 2025!
+⭐ Se este projeto foi útil, considere dar uma estrela!

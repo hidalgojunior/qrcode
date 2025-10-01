@@ -1,0 +1,74 @@
+name: Deploy QRCode DevMenthors
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '7.4'
+        extensions: gd, json, mbstring
+        coverage: none
+    
+    - name: Validate composer.json
+      run: composer validate --strict
+    
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress
+    
+    - name: Check directories
+      run: |
+        mkdir -p microsites qrcodes
+        chmod 755 microsites qrcodes
+    
+    - name: Run permissions check
+      run: composer check-permissions
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '7.4'
+        extensions: gd, json, mbstring
+    
+    - name: Deploy to production
+      run: composer deploy
+    
+    - name: Deploy via FTP
+      uses: SamKirkland/FTP-Deploy-Action@4.3.3
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        server-dir: /public_html/
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/node_modules/**
+          **/vendor/**
+          **/.env
+          **/microsites/*.json
+          **/qrcodes/*
+          !**/microsites/.gitkeep
+          !**/qrcodes/.gitkeep
+    
+    - name: Notification
+      if: success()
+      run: echo "✓ Deploy realizado com sucesso!"

@@ -1,0 +1,71 @@
+{
+    "name": "hidalgojunior/qrcode-devmenthors",
+    "description": "Sistema gerador de QR Codes e microsites DevMenthors",
+    "type": "project",
+    "keywords": [
+        "qrcode",
+        "microsite",
+        "devmenthors",
+        "generator",
+        "php"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Hidalgo Junior",
+            "email": "hidalgojunior@example.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.4.0",
+        "ext-gd": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        },
+        "files": [
+            "config.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "@php -r \"if (!file_exists('microsites')) { mkdir('microsites', 0755, true); }\"",
+            "@php -r \"if (!file_exists('qrcodes')) { mkdir('qrcodes', 0755, true); }\""
+        ],
+        "post-update-cmd": [
+            "@php -r \"if (!file_exists('microsites')) { mkdir('microsites', 0755, true); }\"",
+            "@php -r \"if (!file_exists('qrcodes')) { mkdir('qrcodes', 0755, true); }\""
+        ],
+        "deploy": [
+            "composer install --no-dev --optimize-autoloader",
+            "@php -r \"echo '✓ Deploy concluído com sucesso!\\n';\""
+        ],
+        "test": "phpunit",
+        "check-permissions": [
+            "@php -r \"echo 'Verificando permissões...\\n';\"",
+            "@php -r \"$dirs = ['microsites', 'qrcodes']; foreach($dirs as $dir) { if(!is_writable($dir)) { echo '✗ '.$dir.' não tem permissão de escrita\\n'; exit(1); } else { echo '✓ '.$dir.' OK\\n'; } }\"",
+            "@php -r \"echo '✓ Todas as permissões OK!\\n';\""
+        ]
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

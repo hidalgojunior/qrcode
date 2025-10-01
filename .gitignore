@@ -1,0 +1,64 @@
+# Vendor
+/vendor/
+
+# Composer
+composer.lock
+composer.phar
+
+# Dados de usuários (microsites gerados)
+/microsites/*.json
+!/microsites/.gitkeep
+
+# QR Codes gerados
+/qrcodes/*.png
+/qrcodes/*.jpg
+/qrcodes/*.svg
+!/qrcodes/.gitkeep
+
+# Logs
+*.log
+/logs/
+
+# Cache
+/cache/
+*.cache
+
+# IDEs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+Thumbs.db
+
+# Configurações locais
+config.local.php
+.env
+.env.local
+
+# Temporários
+/tmp/
+/temp/
+*.tmp
+
+# Uploads
+/uploads/*
+!/uploads/.gitkeep
+
+# Node modules (se usar)
+node_modules/
+package-lock.json
+
+# Sistema operacional
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Backups
+*.bak
+*.backup
+*.old
